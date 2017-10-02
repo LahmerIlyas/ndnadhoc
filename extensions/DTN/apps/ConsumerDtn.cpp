@@ -95,7 +95,7 @@ namespace ns3{
                 m_requestedFiles.push_back(index);
 
                 std::cout<<" The consumer selected to request the file with index "<<index<<std::endl;
-                ns3::Simulator::Schedule(ns3::Seconds(500*i ),&ConsumerDtn::requestAFile,this,index);
+                ns3::Simulator::Schedule(ns3::Seconds(5*i ),&ConsumerDtn::requestAFile,this,index);
                 //requestAFile(index);
             }
                //std::terminate();
