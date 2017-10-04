@@ -124,6 +124,12 @@ namespace nfd
         }
 
         pair<bool, Face *> AdhocStrategy::canTheInterestBeSatisfiedByLocalApp(const Interest &interest) {
+            /**
+             * When profiling, this method was consuming lot of ressources, so we use caching
+             * to make simulcation runs faster
+             */
+
+
             for (nfd::Fib::const_iterator entry = getForwarder().getFib().begin(); entry != getForwarder().getFib().end(); entry++){
                 //log(" testing for " + ((Name)entry->getPrefix()).toUri());
                 if(((Name)entry->getPrefix()).toUri().size() > 1){

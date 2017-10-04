@@ -18,7 +18,7 @@ namespace nfd{
         void EpidimicNDN::onContact(const Face &face) {
             m_nct.addContact(face);
             //we send all Interests in the CIT
-            log( " On contact is called ");
+            //log( " On contact is called ");
             for(auto& it : m_cit){
                 m_shaper->Enqueue(it.second.getInterest(), face);
             }
@@ -44,13 +44,12 @@ namespace nfd{
                 return;
             }
 
-
             //we insert in the cit
             m_cit.insert(interest);
         }
 
         void EpidimicNDN::onData(const Data &data, const Face& face) {
-            log("node received data packet ");
+            //log("node received data packet ");
             //we first remove any pending Interest with the same name as the received Data packet
             m_cit.remove(data);
 

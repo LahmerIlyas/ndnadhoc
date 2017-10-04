@@ -93,7 +93,8 @@ namespace ns3{
             m_catalog = new ContentCatalog(m_contentCatalogPath);
             for(auto& it : m_catalog->entries){
                 //std::cout<<" Adding fib entry " <<it.prefix<<std::endl;
-                ns3::ndn::FibHelper::AddRoute(GetNode(),it.prefix,m_face,0);
+                ndn::Name name(it.prefix);
+                ns3::ndn::FibHelper::AddRoute(GetNode(),name.getPrefix(1),m_face,0);
             }
         }
 

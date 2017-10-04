@@ -88,7 +88,7 @@ void BonnmotionScenario::parseFile() {
     }
     std::string mobilityParametersFilePath;
     for (auto it = componenets.begin(); it != componenets.end() && it + 1 != componenets.end(); it++) {
-        mobilityParametersFilePath += "/" + *it;
+        mobilityParametersFilePath += *it +"/";
     }
     mobilityParametersFilePath += "/" + pair[0] + ".params";
     std::ifstream file(mobilityParametersFilePath.c_str());

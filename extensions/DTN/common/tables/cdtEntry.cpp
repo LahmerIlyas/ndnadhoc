@@ -14,7 +14,6 @@ cdtEntry::cdtEntry(const ndn::Data &data) {
     dt->setSignature(data.getSignature());
     m_hops          = data.getTag<nfd::lp::HopCountTag>()->get();
     dt->setTag(std::make_shared<nfd::lp::HopCountTag>(m_hops));
-    dt->wireEncode();
 
     m_data          = dt;
     m_reveivedAt    = ns3::Simulator::Now().GetSeconds();

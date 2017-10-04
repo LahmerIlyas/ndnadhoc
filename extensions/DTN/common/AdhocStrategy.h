@@ -61,6 +61,9 @@ namespace nfd
             ns3::Ptr<ns3::UniformRandomVariable> m_rand;
 
             AbstractShaper* m_shaper;
+
+        private:
+            std::unordered_map<ndn::Name, nfd::Face*> m_appPrefixes;
         };
     }
 }

@@ -33,7 +33,6 @@ citEntry::citEntry(const ndn::Interest &interest) {
     m_interest->setInterestLifetime(interest.getInterestLifetime());
     m_hops       = interest.getTag<nfd::lp::HopCountTag>()->get();
     m_interest->setTag(std::make_shared<nfd::lp::HopCountTag>(m_hops));
-    m_interest->wireEncode();
 
     m_receivedAt = ns3::Simulator::Now().GetSeconds();
 }
