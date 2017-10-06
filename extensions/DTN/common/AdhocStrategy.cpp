@@ -123,15 +123,24 @@ namespace nfd
 
         }
 
-        pair<bool, Face *> AdhocStrategy::canTheInterestBeSatisfiedByLocalApp(const Interest &interest) {
+        pair<bool, Face* > AdhocStrategy::canTheInterestBeSatisfiedByLocalApp(const Interest &interest) {
             /**
              * When profiling, this method was consuming lot of ressources, so we use caching
              * to make simulcation runs faster
              */
+            /*if(m_appPrefixes != nullptr){
+                auto it = m_appPrefixes->find(interest.getName());
+                if(it == m_appPrefixes->end()){
+                    return std::make_pair(false, nullptr);
+                }
+                return std::make_pair(true, it->second);
+            }
+            m_appPrefixes = new std::unordered_map<ndn::Name, nfd::Face*>();
+            */
 
 
             for (nfd::Fib::const_iterator entry = getForwarder().getFib().begin(); entry != getForwarder().getFib().end(); entry++){
-                //log(" testing for " + ((Name)entry->getPrefix()).toUri());
+                log(" testing for " + ((Name)entry->getPrefix()).toUri());
                 if(((Name)entry->getPrefix()).toUri().size() > 1){
                     //checking if it's not a localhost face
                     if(((Name)entry->getPrefix()).get(0).toUri().compare("localhost") != 0){
@@ -146,6 +155,8 @@ namespace nfd
                     }
                 }
             }
+            if(getNodeName().compare("Node_1") == 0)
+                std::terminate();
             return std::make_pair(false, nullptr);
         }
 

@@ -45,6 +45,6 @@ set(SOURCE_FILES
         extensions/DTN/common/AbstractShaper.h
         extensions/DTN/common/SimplShaper.cpp
         extensions/DTN/common/SimplShaper.h
-        )
+        extensions/common/nameTree/Node.cpp extensions/common/nameTree/Node.h extensions/common/nameTree/NameTree.cpp extensions/common/nameTree/NameTree.h extensions/common/nameTree/LeafNode.cpp extensions/common/nameTree/LeafNode.h scenarios/profile.cpp)
 
 add_executable(scenario ${SOURCE_FILES})

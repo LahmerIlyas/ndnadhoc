@@ -94,7 +94,7 @@ namespace ns3{
             for(auto& it : m_catalog->entries){
                 //std::cout<<" Adding fib entry " <<it.prefix<<std::endl;
                 ndn::Name name(it.prefix);
-                ns3::ndn::FibHelper::AddRoute(GetNode(),name.getPrefix(1),m_face,0);
+                ns3::ndn::FibHelper::AddRoute(GetNode(),name,m_face,0);
             }
         }
 

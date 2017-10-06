@@ -45,7 +45,7 @@ dataBaseLocation = "/home/lahmer/ndnSIM/scenario/results/datasize"      #The sim
 
 numberOfRequestedFiles = 3                                              #This is the number of files that each consumer will request
 
-numberOfConsumersVector = [5]                                           #this is vector of parameters that denote the number of consumers
+numberOfConsumersVector = [1]                                           #this is vector of parameters that denote the number of consumers
                                                                         #each parameter of this vector will result in a different simulation
 
 numberOfProducers = 1                                                   #this is the number of producers

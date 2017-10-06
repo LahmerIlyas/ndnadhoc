@@ -63,7 +63,7 @@ namespace nfd
             AbstractShaper* m_shaper;
 
         private:
-            std::unordered_map<ndn::Name, nfd::Face*> m_appPrefixes;
+            std::unordered_map<ndn::Name, nfd::Face*>* m_appPrefixes;
         };
     }
 }

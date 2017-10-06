@@ -3,6 +3,7 @@
 //
 
 #include "EpidimicNDN.h"
+#include "../../common/nameTree/Node.h"
 
 namespace nfd{
     namespace fw{
@@ -54,7 +55,6 @@ namespace nfd{
             m_cit.remove(data);
 
             m_cdt.insert(data);
-
 
 
         }
