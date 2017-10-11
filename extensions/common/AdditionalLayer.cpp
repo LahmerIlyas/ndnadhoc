@@ -152,7 +152,7 @@ namespace ns3{
             std::vector<Address> facesToBeDeleted;
 
             for(auto& it : m_faces){
-                if(it.second.lastReceived.GetSeconds() + 1.0 < Simulator::Now().GetSeconds())
+                if(it.second.lastReceived.GetSeconds() + 2.0 < Simulator::Now().GetSeconds())
                     facesToBeDeleted.push_back(it.first);
             }
 

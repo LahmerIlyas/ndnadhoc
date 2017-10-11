@@ -15,6 +15,7 @@
 #include <ns3/core-module.h>
 #include <ns3/ndn-all.hpp>
 #include "cdtEntry.h"
+#include "../../../common/nameTree/NameTree.h"
 #include <boost/signal.hpp>
 #include <boost/bind.hpp>
 
@@ -24,41 +25,23 @@ typedef cdtTable::iterator    cdtIterator;
 
 class cdt {
 public:
-    cdt(double size = 1000);
+    cdt(NameTree& nt, double size = 1000);
 
     void insert(const ndn::Data& data);
 
     void remove(const ndn::Data& data);
 
-    cdtIterator begin();
-
-    cdtIterator end();
-
-    double size();
-
-    double getSizeKo();
-
-    void setKoLimitSize(double limitSize);
-
     boost::signal<void ()>  onFullBuffer;
 
     bool isHere(const ndn::Name name);
 
-    cdtIterator getEntryByName(const ndn::Name& name);
-
-    void remove(const ndn::Name& name);
-
-    void removeOldest();
-
+    void iterateOverElements(std::function<void (cdtEntry& entry)> func);
 private:
-    void logBufferSize();
-private:
-    double                  m_limitSize;
-    //cdtTable                m_table;
-    double                  m_tableSizeInKo = 0;
-    std::unordered_map<ndn::Name,cdtEntry> m_entries;
+    uint64                  m_limitSizeInBytes;
 
-    std::vector<std::pair<double, double>> m_bufferSizeEvolution;       //<time, buffer size>
+    uint64                  m_currentSizeInBytes = 0;
+
+    NameTree&               m_nt;
 };
 
 

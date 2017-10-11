@@ -39,11 +39,11 @@ numberOfFiles = 1000                                        # this is the total 
 dataSizes = [1024*2]
 
 
-dataBaseLocation = "/home/lahmer/ndnSIM/scenario/results/datasize"      #The simulation results are stored in sqlite database
+dataBaseLocation = "/home/lahmer/tutorial/ndnSIM/scenario/results/results"      #The simulation results are stored in sqlite database
                                                                         #you shoule provide the path to the database
 
 
-numberOfRequestedFiles = 3                                              #This is the number of files that each consumer will request
+numberOfRequestedFiles = 1                                              #This is the number of files that each consumer will request
 
 numberOfConsumersVector = [1]                                           #this is vector of parameters that denote the number of consumers
                                                                         #each parameter of this vector will result in a different simulation
@@ -75,7 +75,7 @@ simulationAreaWidht  = 5000
 
 nodeSpeeds = [10]                                                       # a vector of parameters that contains the maximum speed of nodes
 
-simulationDuration = 80000                                              # the total duration of the simulation
+simulationDuration = 20000                                              # the total duration of the simulation
 
 wifiStandard = "802.11g"                                                #the wifi standard, for now we support only 802.11a, 802.11g
 

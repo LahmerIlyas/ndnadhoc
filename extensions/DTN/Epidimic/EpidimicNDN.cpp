@@ -11,22 +11,24 @@ namespace nfd{
 
         NFD_REGISTER_STRATEGY(EpidimicNDN);
 
-        EpidimicNDN::EpidimicNDN(nfd::Forwarder &forwarder, const ndn::Name &name) : AdhocStrategy(forwarder, name) {
+        EpidimicNDN::EpidimicNDN(nfd::Forwarder &forwarder, const ndn::Name &name) : AdhocStrategy(forwarder, name), m_cit(m_nt), m_cdt(m_nt) {
 
 
         }
 
         void EpidimicNDN::onContact(const Face &face) {
             m_nct.addContact(face);
-            //we send all Interests in the CIT
-            //log( " On contact is called ");
-            for(auto& it : m_cit){
-                m_shaper->Enqueue(it.second.getInterest(), face);
-            }
-            //we send all data packets
-            for(auto& it : m_cdt){
-                m_shaper->Enqueue(it.second.getData(), face);
-            }
+            log(" ############################################################################"" ");
+            //m_nct.printDebugInfos();
+
+            m_cit.iterateOverElements([this, &face](citEntry& entry){
+                m_shaper->Enqueue(entry.getInterest(), face);
+            });
+
+            m_cdt.iterateOverElements([this, &face](cdtEntry& entry){
+               m_shaper->Enqueue(entry.getData(),face);
+            });
+
         }
 
         void EpidimicNDN::onContactLost(const Face &face) {
@@ -34,27 +36,27 @@ namespace nfd{
         }
 
         void EpidimicNDN::onInterest(const Interest &interest, const Face& face) {
-            //is there a carried data packet in the local cdt
+
+            //we first check the local CDT
             if(m_cdt.isHere(interest.getName()))
                 return;
 
-            //first we check if the Interest can be satisfied by a local app
+            //we check if the Interest can be satisfied by a local app
             auto can = canTheInterestBeSatisfiedByLocalApp(interest);
             if(can.first){
                 can.second->sendInterest(interest);
                 return;
             }
-
             //we insert in the cit
             m_cit.insert(interest);
         }
 
         void EpidimicNDN::onData(const Data &data, const Face& face) {
             //log("node received data packet ");
-            //we first remove any pending Interest with the same name as the received Data packet
-            m_cit.remove(data);
-
+            //This will create a new entry in the nametree and delete any CIT entry available
             m_cdt.insert(data);
+
+            //we don't need to check for an application requesting the interest because it's the goal of the PIT
 
 
         }

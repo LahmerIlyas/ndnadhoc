@@ -3,13 +3,12 @@
 //
 
 #include "NameTree.h"
-
 NameTree::NameTree() {
     ndn::Name::Component name;
     m_root = new Node(nullptr,name);
 }
 
-LeafNode *NameTree::insertEntry(ndn::Name &name) {
+LeafNode *NameTree::insertEntry(const ndn::Name &name) {
     Node* current = m_root;
 
     for(auto it = name.begin(); it != name.end(); it++){
@@ -38,7 +37,7 @@ LeafNode *NameTree::insertEntry(ndn::Name &name) {
     return nullptr;
 }
 
-LeafNode *NameTree::lookupEntry(ndn::Name &name) {
+LeafNode *NameTree::lookupEntry(const ndn::Name &name) {
     Node* current = m_root;
     for(auto it = name.begin(); it != name.end(); it++){
         uint64 hashValue = CityHash64((const char *) it->wire(), it->size());
@@ -52,5 +51,18 @@ LeafNode *NameTree::lookupEntry(ndn::Name &name) {
         return nullptr;
 
     return (LeafNode*)current;
+
+}
+
+NameTree::NameTree(const std::string &serilizedNameTree) {
+
+}
+
+std::string NameTree::serialize() {
+    return std::string();
+}
+
+void NameTree::eraseEntry(const ndn::Name &name) {
+
 
 }

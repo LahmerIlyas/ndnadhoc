@@ -57,7 +57,6 @@ namespace ns3{
             m_metrics.logDataReieved(*data);
 
             std::cout<<" Consumer received a Data packet *********"<<data->getTag<nfd::lp::HopCountTag>()->get()<<"   "<<++n<<std::endl;
-            //std::terminate();
         }
 
         void ConsumerDtn::StartApplication() {

@@ -32,7 +32,7 @@ namespace ns3{
             std::string filePrefix;
             double startTime;
             double endTime = -1.0;
-            std::map<std::string, std::tuple<double, double,uint32_t >> entries;       //Interest name, sent, received
+            std::map<std::string, std::tuple<double, double,uint32_t >> entries;       //Interest name, sent, received, hop count
         };
 
         struct ClientMetrics{

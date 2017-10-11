@@ -27,14 +27,18 @@ bool cdtEntry::operator==(const ndn::Data &data) {
     return m_data->getName().compare(data.getName()) == 0;
 }
 
-double cdtEntry::getReveivedAt() const {
+double cdtEntry::getReveivedAt(){
     return m_reveivedAt;
 }
 
-const uint32_t &cdtEntry::getHops() const {
+uint32_t cdtEntry::getHops(){
     return m_hops;
 }
 
-const shared_ptr<ndn::Data> &cdtEntry::getData() const {
+shared_ptr<ndn::Data> cdtEntry::getData() {
     return m_data;
+}
+
+cdtEntry::~cdtEntry() {
+    m_data.reset();
 }

@@ -17,7 +17,7 @@
  *      /ndn/data1/1
  *
  */
-
+typedef std::unordered_multimap<uint64, LeafNode*>::iterator entriesIterator;
 
 class NameTree {
 public:
@@ -37,7 +37,7 @@ public:
      *
      */
 
-    LeafNode* lookupEntry(ndn::Name& name);
+    LeafNode* lookupEntry(const ndn::Name& name);
 
     /**
      * This method will search for an entry, If it already exists, it will return a pointer to the leafNode of the
@@ -46,7 +46,13 @@ public:
      * @param name
      * @return
      */
-    LeafNode* insertEntry(ndn::Name& name);
+    LeafNode* insertEntry(const ndn::Name& name);
+
+    /**
+     *
+     * @param name
+     */
+    void eraseEntry(const ndn::Name& name);
 
     /**
      * This method will serialize the nametree to be sended to other nodes
@@ -55,10 +61,18 @@ public:
     std::string serialize();
 
 
+    entriesIterator begin(){
+        return m_leafs.begin();
+    }
+
+    entriesIterator end(){
+        return m_leafs.end();
+    }
 
 
 
-public:
+
+private:
     Node* m_root;              //this is the root node, it contains no name
 
     std::unordered_multimap<uint64, LeafNode*> m_leafs;

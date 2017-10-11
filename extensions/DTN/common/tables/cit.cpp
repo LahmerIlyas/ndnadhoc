@@ -4,36 +4,57 @@
 
 #include "cit.h"
 
-uint32_t cit::getLimit() const {
-    return m_limit;
+
+cit::cit(NameTree &tree): m_nt(tree) {
+
 }
 
-void cit::setLimit(uint32_t limit) {
-    m_limit = limit;
-}
+
 
 void cit::insert(const ndn::Interest &interest) {
-
-    if(m_entries.find(interest.getName()) != m_entries.end())
+    auto entry = m_nt.lookupEntry(interest.getName());
+    if(entry == nullptr){
+        entry = m_nt.insertEntry(interest.getName());
+    }
+    //we check if there is a cdtEntry
+    if(entry->hasCDTEntry())
         return;
 
-    citEntry entry(interest);
-    m_entries.insert(std::make_pair<>(interest.getName(),entry));
-
-}
-
-cit::cit() {
-
-}
-
-unsigned long cit::size() {
-    return m_entries.size();
+    //we create a new citEntry
+    auto newCITEntry = std::make_shared<citEntry>(citEntry(interest));
+    entry->addCITEntry(newCITEntry);
 }
 
 void cit::remove(const ndn::Interest &interest) {
-    m_entries.erase(interest.getName());
+    auto entry = m_nt.lookupEntry(interest.getName());
+    if(entry == nullptr){
+        return;
+    }
+    entry->eraseCITEntry();
 }
 
 void cit::remove(const ndn::Data &data) {
-    m_entries.erase(data.getName());
+    auto entry = m_nt.lookupEntry(data.getName());
+    if(entry == nullptr){
+        return;
+    }
+    entry->eraseCITEntry();
+
 }
+
+bool cit::contains(const ndn::Name &name) {
+    auto entry = m_nt.lookupEntry(name);
+    if(entry == nullptr)
+        return false;
+
+    return entry->hasCITEntry();
+}
+
+void cit::iterateOverElements(std::function<void(citEntry &entry)> func) {
+    for(auto& it : m_nt){
+        if(it.second->hasCITEntry()){
+            func(it.second->getCITEntry());
+        }
+    }
+}
+

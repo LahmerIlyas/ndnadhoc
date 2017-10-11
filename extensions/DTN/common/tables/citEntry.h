@@ -19,13 +19,15 @@ public:
 
     citEntry(const ndn::Interest& interest);
 
+    ~citEntry();
+
     bool operator == (const ndn::Interest& interest);
 
     bool operator == (const ndn::Data& data);
 
     ndn::Name getName();
 
-    const shared_ptr<ndn::Interest> &getInterest() const;
+    shared_ptr<ndn::Interest> getInterest() const;
 
     double getReceivedAt() const;
 

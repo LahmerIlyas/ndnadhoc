@@ -4,8 +4,9 @@
 #include "ns3/ndnSIM/model/ndn-common.hpp"
 #include <ns3/ndnSIM/ndn-cxx/lp/tags.hpp>
 #include "citEntry.h"
+#include "../../../common/Fields/StringTag.h"
 
-const shared_ptr<ndn::Interest> &citEntry::getInterest() const {
+shared_ptr<ndn::Interest> citEntry::getInterest() const {
     return m_interest;
 }
 
@@ -34,6 +35,10 @@ citEntry::citEntry(const ndn::Interest &interest) {
     m_hops       = interest.getTag<nfd::lp::HopCountTag>()->get();
     m_interest->setTag(std::make_shared<nfd::lp::HopCountTag>(m_hops));
 
+    auto tag = std::make_shared<ndn::lp::NameTreeTag>(ndn::lp::NameTreeTag("Hello"));
+    m_interest->setTag<nfd::lp::NameTreeTag>(tag);
+
+
     m_receivedAt = ns3::Simulator::Now().GetSeconds();
 }
 
@@ -44,5 +49,9 @@ bool citEntry::operator==(const ndn::Data &data) {
 citEntry::citEntry() {
     std::cout<<" The constructor of the cit entry should never be called "<<std::endl;
     std::terminate();
+}
+
+citEntry::~citEntry() {
+    m_interest.reset();
 }
 

@@ -22,15 +22,17 @@ public:
 
     cdtEntry(const ndn::Data& data);
 
+    ~cdtEntry();
+
     uint64_t getSize();
 
     bool operator==(const ndn::Data& data);
 
-    double getReveivedAt() const;
+    double getReveivedAt();
 
-    const uint32_t &getHops() const;
+    uint32_t getHops();
 
-    const shared_ptr<ndn::Data> &getData() const;
+    shared_ptr<ndn::Data> getData();
 
 private:
     std::shared_ptr<ndn::Data>  m_data;

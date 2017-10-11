@@ -44,7 +44,7 @@ namespace nfd
 
             ::cdt m_cdt;
 
-
+            ::NameTree m_nt;
         };
     }
 }

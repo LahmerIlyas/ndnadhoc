@@ -20,13 +20,14 @@ namespace nfd
         AdhocStrategy::AdhocStrategy(nfd::Forwarder &forwarder, const ndn::Name &name) : Strategy(forwarder,name),
                                                                                          m_rand(ns3::CreateObject<ns3::UniformRandomVariable>())
         {
-            m_shaper = new SimpleShaper::SimpleShaper(nullptr, forwarder);
-            m_shaper->startDataSendingLoop();
-            m_shaper->startInterestSendingLoop();
 
             Name selectedStrategy(GenericScenario::m_strategy);
             if(!selectedStrategy.isPrefixOf(name))
                 return ;
+
+            m_shaper = new SimpleShaper::SimpleShaper(nullptr, forwarder);
+            m_shaper->startDataSendingLoop();
+            m_shaper->startInterestSendingLoop();
 
             //on contact is triggered if the face is not an app face
             afterAddFace.connect([this](Face& face){
@@ -68,7 +69,8 @@ namespace nfd
             if (inFace.getLocalUri().toString().compare("appFace://") == 0) {
 
             }else{
-                getForwarder().getPit().erase(&(*pitEntry));
+                //getForwarder().getPit().erase(&(*pitEntry));
+                rejectPendingInterest(pitEntry);
             }
         }
 
@@ -140,7 +142,7 @@ namespace nfd
 
 
             for (nfd::Fib::const_iterator entry = getForwarder().getFib().begin(); entry != getForwarder().getFib().end(); entry++){
-                log(" testing for " + ((Name)entry->getPrefix()).toUri());
+                //log(" testing for " + ((Name)entry->getPrefix()).toUri());
                 if(((Name)entry->getPrefix()).toUri().size() > 1){
                     //checking if it's not a localhost face
                     if(((Name)entry->getPrefix()).get(0).toUri().compare("localhost") != 0){
@@ -155,8 +157,6 @@ namespace nfd
                     }
                 }
             }
-            if(getNodeName().compare("Node_1") == 0)
-                std::terminate();
             return std::make_pair(false, nullptr);
         }
 

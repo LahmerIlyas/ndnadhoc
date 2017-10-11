@@ -8,6 +8,7 @@
 
 #include "Node.h"
 #include "../../DTN/common/tables/citEntry.h"
+#include "../../DTN/common/tables/cdtEntry.h"
 
 /**
  * Only leaf nodes are allowed to contain entries of CDT and CIT
@@ -19,9 +20,24 @@ public:
 
     ndn::Name getEntryName();
 
+    bool hasCITEntry();
+
+    bool hasCDTEntry();
+
+    cdtEntry& getCDTEntry();
+
+    citEntry& getCITEntry();
+
+    void eraseCITEntry();
+
+    void eraseCDTEntry();
+
+    void addCITEntry(std::shared_ptr<citEntry> entry);
+
+    void addCDTEntry(std::shared_ptr<cdtEntry> entry);
 private:
-
-
+    std::shared_ptr<cdtEntry> m_cdtEntry;
+    std::shared_ptr<citEntry> m_citEntry;
 };
 
 

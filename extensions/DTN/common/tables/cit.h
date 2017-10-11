@@ -14,39 +14,25 @@
 #include <ns3/core-module.h>
 #include <ns3/ndn-all.hpp>
 #include "citEntry.h"
+#include "../../../common/nameTree/NameTree.h"
 #include <boost/iterator/transform_iterator.hpp>
-
-typedef std::unordered_map<ndn::Name, citEntry> citTable;
-typedef citTable::iterator citIterator;
 
 class cit {
 public:
 
-    cit();
+    cit(NameTree& tree);
 
     void insert(const ndn::Interest& interest);
-
-    uint32_t getLimit() const;
-
-    void setLimit(uint32_t limit);
-
-    citIterator begin() {
-        return m_entries.begin();
-    }
-
-    citIterator end() {
-        return m_entries.end();
-    }
 
     void remove(const ndn::Interest& interest);
 
     void remove(const ndn::Data& data);
 
-    unsigned long size();
+    bool contains(const ndn::Name& name);
 
+    void iterateOverElements(std::function<void (citEntry& entry)> func);
 private:
-    uint32_t m_limit;
-    citTable m_entries;
+    NameTree& m_nt;
 
 };
 

@@ -3,8 +3,9 @@
 //
 
 #include "BonnmotionScenario.h"
-
-
+#include "DataBaseUtils.h"
+#include"../DTN/apps/ConsumerDtn.h"
+#include "../DTN/common/tables/NodeContactTable.h"
 
 struct ContentCatalogEntry{
     std::string prefix;
@@ -175,6 +176,76 @@ void BonnmotionScenario::setup() {
 
     ns3::Simulator::Destroy();
     printTracersParameters();
+    //now we log the results
+    DataBaseUtils db(m_dataBaseLocation);
+    db.addCouple("seed",m_initialSeed);
+    db.addCouple("Qparamater",m_QParameter);
+    db.addCouple("Sparamater",m_SParameter);
+    db.addCouple("numberofClients",m_numberOfClients);
+    db.addCouple("numberofProducers",m_numberOfProducers);
+    db.addCouple("numberofNodes",m_numberOfNodes);
+    db.addCouple("NumberOfRequestedFile",m_numberOfRequestedFiles);
+    db.addCouple("strategy",m_strategy);
+    db.addCouple("wifiStandard",m_standard);
+    db.addCouple("rate",m_wifiMode);
+    db.addCouple("bufferSize",m_bufferSize);
+    db.addCouple("dataSize", m_dataSize);       //TODO::check this value
+    db.addCouple("simulationDuration",m_simulationDuration);
+    db.addCouple("macTxRtsFailed", m_macTxRtsFailed);
+    db.addCouple("macTxPacketFailed", m_macTxPacketFailed);
+
+    db.addCouple("rtsExceededLimits", m_rtsExceededLimits);
+    db.addCouple("packetRetransmissioExceededLimits", m_packetRetransmissioExceededLimits);
+    db.addCouple("phyTxDrop", m_phyTxDrop);
+    db.addCouple("phyRxDrop", m_phyRxDrop);
+    db.addCouple("macTxDrop", m_macTxDrop);
+    db.addCouple("macRxDrop", m_macRxDrop);
+
+//compute the average delay and the delivery ratio
+    double accumulatedAverageDelay = 0.0;
+    double accumulatedHopCount = 0.0;
+    uint64_t totalNumberofSentInterests = 0;
+    uint64_t totalNumberOfReceivedData = 0;
+
+    for(int i = 0; i < m_numberOfClients; i++){
+        auto client = ns3::DynamicCast<ns3::ndn::ConsumerDtn>(m_clients.Get(i));
+        //for each file requested by the client
+        for(auto& it : client->m_metrics.entries){
+            for(auto& chunk : it.second.entries){
+                totalNumberofSentInterests++;
+                if(std::get<1>(chunk.second) != -1.0){
+                    totalNumberOfReceivedData++;
+                    accumulatedAverageDelay += std::get<1>(chunk.second) - std::get<0>(chunk.second);
+                    accumulatedHopCount += std::get<2>(chunk.second);
+                }
+            }
+        }
+    }
+
+    double averageDelay = accumulatedAverageDelay /(double) totalNumberOfReceivedData;
+    double averageHopCount = accumulatedHopCount /(double) totalNumberOfReceivedData;
+    double averageDeliveryRatio = totalNumberOfReceivedData /(double) totalNumberofSentInterests;
+    db.addCouple("averageDelay", averageDelay);
+    db.addCouple("averageHopCount", averageHopCount);
+    db.addCouple("averageDeliveryRatio", averageDeliveryRatio);
+
+    //concerns the contact informations
+    uint64_t totalTranssferredBytes = NodeContactTable::getFullTransferedBytes();
+    double averageTransfferedBytesPerContact = NodeContactTable::getAverageTransferredBytesPerContact();
+    double totalContactDuration = NodeContactTable::getFullContactDuration();
+    double averageContactDuration = NodeContactTable::getAverageContactDuration();
+
+    db.addCouple("totalTransferredBytes",totalTranssferredBytes);
+    db.addCouple("averageTranssferedBytesPerContact", averageTransfferedBytesPerContact);
+    db.addCouple("totalContactDuration", totalContactDuration);
+    db.addCouple("averageContactDuration", averageContactDuration);
+
+
+
+
+
+    std::cout<<" The query : "<<db.constructInsertQuery()<<std::endl;
+    db.executeQuery(db.constructInsertQuery().c_str());
 
 
 }
