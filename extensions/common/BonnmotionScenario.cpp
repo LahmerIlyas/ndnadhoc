@@ -70,7 +70,8 @@ BonnmotionScenario::BonnmotionScenario(int argc, char* argv[]) {
     std::cout<<" rate"<<m_wifiMode<<std::endl;
     std::cout<<" buffer size"<<m_bufferSize<<std::endl;
     std::cout<<" the wifi standard is "<<m_standard<<std::endl;
-
+    ContentCatalog catalog(m_contenCatalogPath);
+    m_dataSize = catalog.entries.at(0).sizeOfChunk;
 
 
     parseFile();
@@ -234,6 +235,8 @@ void BonnmotionScenario::setup() {
     double averageTransfferedBytesPerContact = NodeContactTable::getAverageTransferredBytesPerContact();
     double totalContactDuration = NodeContactTable::getFullContactDuration();
     double averageContactDuration = NodeContactTable::getAverageContactDuration();
+    double fractionOfSuccessfullTransmissionOfInterests = (double) NodeContactTable::getNumberOfSuccessfullyTransferedInterests() / (double)NodeContactTable::getNumberOfAllSentInterests();
+    double fractionOfSuccessfullyTransmissionOfData = (double) NodeContactTable::getNumberOfSuccessfullyTranssferredData() / (double)NodeContactTable::getNumberOfAllSentData();
 
     db.addCouple("totalTransferredBytes",totalTranssferredBytes);
     db.addCouple("averageTranssferedBytesPerContact", averageTransfferedBytesPerContact);
@@ -242,6 +245,11 @@ void BonnmotionScenario::setup() {
 
 
 
+    std::cout<<fractionOfSuccessfullTransmissionOfInterests<<std::endl;
+    std::cout<<fractionOfSuccessfullyTransmissionOfData<<std::endl;
+    db.addCouple("fractionOfSuccessfullyTransmissionOfData", fractionOfSuccessfullyTransmissionOfData);
+
+    db.addCouple("fractionOfSuccessfullTransmissionOfInterests", fractionOfSuccessfullTransmissionOfInterests);
 
 
     std::cout<<" The query : "<<db.constructInsertQuery()<<std::endl;

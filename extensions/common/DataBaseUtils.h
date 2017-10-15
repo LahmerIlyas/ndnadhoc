@@ -29,6 +29,7 @@ public:
     }
 
     void addCouple(std::string column, double value){
+        std::cout<<" adding values "<<column<<"    "<<value<<std::endl;
         m_values[column] = std::to_string(value);
     }
 

@@ -44,9 +44,9 @@ namespace SimpleShaper {
 
         double rate = 6750000;
 
-        double interestRateFraction = 0.1;
+        double interestRateFraction = 0.2;
 
-        double dataRateFraction = 0.3;
+        double dataRateFraction = 0.5;
 
 
     };

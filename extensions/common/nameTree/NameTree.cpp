@@ -3,6 +3,8 @@
 //
 
 #include "NameTree.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 NameTree::NameTree() {
     ndn::Name::Component name;
     m_root = new Node(nullptr,name);
@@ -65,4 +67,31 @@ std::string NameTree::serialize() {
 void NameTree::eraseEntry(const ndn::Name &name) {
 
 
+}
+
+std::string NameTree::getJsonTreeRepresentation(bool hasCDT, bool hasCIT) {
+    boost::property_tree::ptree tree;
+
+    for(auto& it : m_leafs){
+        auto node = &tree;
+        //we now insert the name into the boost tree
+        if(it.second->hasCDTEntry() && hasCDT or it.second->hasCITEntry() && hasCIT){
+            auto name = it.second->getEntryName();
+            //for each componenet of the name we add an entry
+            for(auto componenet : name){
+                std::string c = componenet.toUri();
+                //check if the componenet exists if so update the 'node' pointer, otherwise create a componenet and increment
+                if(!node->get_child_optional(c)){
+                    node->push_back(std::make_pair(c,boost::property_tree::ptree()));
+                    node = &(node->get_child(c));
+                }else{
+                    node = &(node->get_child(c));
+                }
+            }
+        }
+    }
+
+    std::ostringstream buf;
+    boost::property_tree::write_json (buf, tree, false);
+    return buf.str();
 }

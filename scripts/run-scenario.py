@@ -32,26 +32,26 @@ numberOfRepititions = 1                                             #How many ti
             /adhoc/fzefoplerg/file1/512
 '''
 
-fileSize = 4 * 1024 * 1024                                  # this is the size of the file
+fileSize = 1 * 1024 * 1024                                  # this is the size of the file
 
 numberOfFiles = 1000                                        # this is the total number of files available in the network
                                                             #consumers can on
-dataSizes = [1024*2]
+dataSizes = [4 * 1024]
 
 
 dataBaseLocation = "/home/lahmer/tutorial/ndnSIM/scenario/results/results"      #The simulation results are stored in sqlite database
                                                                         #you shoule provide the path to the database
 
 
-numberOfRequestedFiles = 1                                              #This is the number of files that each consumer will request
+numberOfRequestedFiles = 30                                              #This is the number of files that each consumer will request
 
-numberOfConsumersVector = [1]                                           #this is vector of parameters that denote the number of consumers
+numberOfConsumersVector = [5]                                           #this is vector of parameters that denote the number of consumers
                                                                         #each parameter of this vector will result in a different simulation
 
 numberOfProducers = 1                                                   #this is the number of producers
 
 
-strategies = ["/localhost/nfd/strategy/epidimicNDN"]#""/localhost/nfd/strategy/SummaryEpidimic"]#,"/localhost/nfd/strategy/epidimicNhops"]
+strategies = ["/localhost/nfd/strategy/epidimicNDNSummary"]#""/localhost/nfd/strategy/SummaryEpidimic"]#,"/localhost/nfd/strategy/epidimicNhops"]
 
 
 
@@ -75,7 +75,7 @@ simulationAreaWidht  = 5000
 
 nodeSpeeds = [10]                                                       # a vector of parameters that contains the maximum speed of nodes
 
-simulationDuration = 20000                                              # the total duration of the simulation
+simulationDuration = 40000                                              # the total duration of the simulation
 
 wifiStandard = "802.11g"                                                #the wifi standard, for now we support only 802.11a, 802.11g
 
@@ -130,11 +130,9 @@ for numberOfConsumers in numberOfConsumersVector:
         for size in dataSizes:
             for rep in range(0, numberOfRepititions):
                 for strategy in strategies:
-                    #generating a temp mobility trace*
                     mobilityFileLocation = tempFileLocation + "/" + rand_str(20)
                     generateRandomWayPointMobilityTrace(output_direcctory=mobilityFileLocation,nodes=str(numberOfNode),width=str(simulationAreaWidht)
                                                         ,height=str(simulationAreaHeight),speed=str(nodeSpeed), duration=str(simulationDuration))
-                    #generate a temp content catalog file
                     contentCatalogLocation = tempFileLocation +"/" +rand_str(20)
                     generateCotnentCatalogFile(contentCatalogLocation,fileSize=fileSize,chunkSize=size,numberOfFiles=numberOfFiles)
                     s = Scenario()
@@ -152,6 +150,7 @@ for numberOfConsumers in numberOfConsumersVector:
                     s.wifiStandard = wifiStandard
                     s.wifiMode = wifiDataMode
                     ScenariosPool.append(s)
+
 
 pool = ThreadPool(numberOfThreads)
 

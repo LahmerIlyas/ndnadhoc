@@ -6,8 +6,8 @@
 #define SCENARIO_NAMETREE_H
 
 
-#include "Node.h"
 #include "LeafNode.h"
+
 /**
  * This implementation is for exact name matching purposes only, it's optimized only for
  * the purpose of making simulation runs faster, nothing else
@@ -69,7 +69,7 @@ public:
         return m_leafs.end();
     }
 
-
+    std::string getJsonTreeRepresentation(bool hasCDT, bool hasCIT);
 
 
 private:

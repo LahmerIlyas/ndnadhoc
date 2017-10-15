@@ -54,3 +54,17 @@ void cdt::iterateOverElements(std::function<void(cdtEntry &entry)> func) {
     }
 }
 
+std::string cdt::getJsonSummary() {
+    return m_nt.getJsonTreeRepresentation(true, false);
+
+}
+
+size_t cdt::size() {
+    size_t size = 0;
+    for(auto& it : m_nt){
+        if(it.second->hasCDTEntry())
+            size++;
+    }
+    return size;
+}
+

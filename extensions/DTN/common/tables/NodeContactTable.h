@@ -35,12 +35,19 @@ public:
 
     static double getAverageTransferredBytesPerContact();
 
+    static uint64_t getNumberOfSuccessfullyTransferedInterests();
+
+    static uint64_t getNumberOfAllSentInterests();
+
+    static uint64_t getNumberOfSuccessfullyTranssferredData();
+
+    static uint64_t getNumberOfAllSentData();
 
 
 private:
     std::map<std::string, NodeContactTableEntry> m_entries;
 
-    static std::vector<std::tuple<double,uint64_t>> m_contactVector;                         //this is used to log the contact duration for metrics
+    static std::vector<std::tuple<double,uint64_t, uint64_t, uint64_t, uint64_t, uint64_t >> m_contactVector;                         //this is used to log the contact duration for metrics
 };
 
 

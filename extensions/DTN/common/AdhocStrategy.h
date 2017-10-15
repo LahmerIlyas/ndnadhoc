@@ -56,6 +56,7 @@ namespace nfd
 
             std::pair<bool,Face*> canTheInterestBeSatisfiedByLocalApp(const Interest& interest);
 
+            std::shared_ptr<ndn::Interest> createInterest(const std::string& name, const std::string& additionalData);
         protected:
 
             ns3::Ptr<ns3::UniformRandomVariable> m_rand;

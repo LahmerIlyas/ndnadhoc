@@ -29,7 +29,7 @@ namespace ns3{
                             .SetGroupName("Ndn")
                             .SetParent<App>()
                             .AddConstructor<ConsumerDtn>()
-                            .AddAttribute("LifeTime", "LifeTime for interest packet", StringValue("10000s"),
+                            .AddAttribute("LifeTime", "LifeTime for interest packet", StringValue("80000s"),
                                                                         MakeTimeAccessor(&ConsumerDtn::m_interestLifeTime), MakeTimeChecker())
                             .AddAttribute("NumberOfRequestedFile","The number of requested files",IntegerValue(),MakeIntegerAccessor(&ConsumerDtn::m_numberOfRequestedFiles),ns3::MakeIntegerChecker<int>())
                             .AddAttribute("Qparameter","",DoubleValue(),MakeDoubleAccessor(&ConsumerDtn::m_q),MakeDoubleChecker<double>())
@@ -94,7 +94,7 @@ namespace ns3{
                 m_requestedFiles.push_back(index);
 
                 std::cout<<" The consumer selected to request the file with index "<<index<<std::endl;
-                ns3::Simulator::Schedule(ns3::Seconds(5*i ),&ConsumerDtn::requestAFile,this,index);
+                ns3::Simulator::Schedule(ns3::Seconds(500*i ),&ConsumerDtn::requestAFile,this,index);
                 //requestAFile(index);
             }
                //std::terminate();

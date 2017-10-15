@@ -45,8 +45,7 @@ namespace SimpleShaper {
             }
             interestQueue.erase(interestQueue.begin());
 
-            double delay = size/(rate * interestRateFraction) + m_rand->GetValue(0,0.001);
-
+            double delay = size/(rate * interestRateFraction) + m_rand->GetValue(0,0.000001);
             ns3::Simulator::Schedule(ns3::Seconds(delay),&SimpleShaper::startInterestSendingLoop, this);
             return;
         }
@@ -66,7 +65,7 @@ namespace SimpleShaper {
             }
             dataQueue.erase(dataQueue.begin());
             //std::cout<<" Scheduling Data "<<size<<"    sending after "<<size/(rate * (dataRateFraction))<<"    queue "<<dataQueue.size()<<"   mac queue esize "<<getMacQueue()->GetSize()<<std::endl;
-            double delay = size/(rate * (dataRateFraction)) + m_rand->GetValue(0,0.001);
+            double delay = size/(rate * (dataRateFraction)) + m_rand->GetValue(0,0.0001);
             ns3::Simulator::Schedule(ns3::Seconds(delay),&SimpleShaper::startDataSendingLoop, this);
             return;
         }

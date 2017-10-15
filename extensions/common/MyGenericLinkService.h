@@ -11,7 +11,7 @@
 #include <ns3/ndnSIM/NFD/daemon/face/generic-link-service.hpp>
 
 /***
- * This class is here only because the NDN team didn't thought about making an easier way to add new fields
+ * This class is here only because the NDN
  * to packets and because adding a field in the interest.hpp and interest.cpp files requires changing the code
  * of ndnSIM which violate the purpose of this package.
  */

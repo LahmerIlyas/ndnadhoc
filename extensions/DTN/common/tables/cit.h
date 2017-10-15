@@ -31,9 +31,12 @@ public:
     bool contains(const ndn::Name& name);
 
     void iterateOverElements(std::function<void (citEntry& entry)> func);
+
+    std::string getJsonSummary();
+
+    size_t size();
 private:
     NameTree& m_nt;
-
 };
 
 

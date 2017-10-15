@@ -170,6 +170,19 @@ namespace nfd
             log( " Before expire pending Interest is called " + pitEntry->getName().toUri());
         }
 
+
+        std::shared_ptr<ndn::Interest> AdhocStrategy::createInterest(const std::string &name, const std::string &additionalData) {
+            std::shared_ptr<Interest> interest = std::make_shared<Interest>();
+            interest->setName(name);
+            interest->setNonce(0);
+            time::milliseconds interestLifeTime(10000);
+            interest->setInterestLifetime(interestLifeTime);
+            interest->setAdditionalData(additionalData);
+            interest->wireEncode();
+
+            return interest;
+        }
+
     }
 
 }

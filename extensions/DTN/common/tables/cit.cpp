@@ -39,7 +39,6 @@ void cit::remove(const ndn::Data &data) {
         return;
     }
     entry->eraseCITEntry();
-
 }
 
 bool cit::contains(const ndn::Name &name) {
@@ -56,5 +55,18 @@ void cit::iterateOverElements(std::function<void(citEntry &entry)> func) {
             func(it.second->getCITEntry());
         }
     }
+}
+
+std::string cit::getJsonSummary() {
+    return m_nt.getJsonTreeRepresentation(false, true);
+}
+
+size_t cit::size() {
+    size_t size = 0;
+    for(auto& it : m_nt){
+        if(it.second->hasCITEntry())
+            size++;
+    }
+    return size;
 }
 

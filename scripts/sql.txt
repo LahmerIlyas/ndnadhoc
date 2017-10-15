@@ -27,6 +27,8 @@ averageDeliveryRatio FLOAT,
 totalTransferredBytes INTEGER,
 averageTranssferedBytesPerContact FLOAT,
 totalContactDuration FLOAT,
-averageContactDuration FLOAT
+averageContactDuration FLOAT,
+fractionOfSuccessfullyTransmissionOfData FLOAT,
+fractionOfSuccessfullTransmissionOfInterests FLOAT
 );
 

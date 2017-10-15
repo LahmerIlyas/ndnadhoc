@@ -5,7 +5,7 @@
 #include <numeric>
 #include "NodeContactTable.h"
 
-std::vector<std::tuple<double,uint64_t>> NodeContactTable::m_contactVector;
+std::vector<std::tuple<double,uint64_t, uint64_t, uint64_t, uint64_t, uint64_t >> NodeContactTable::m_contactVector;
 
 void NodeContactTable::addContact(const nfd::Face &face) {
     std::string remoteEndPoint = face.getRemoteUri().toString();
@@ -26,7 +26,11 @@ void NodeContactTable::endContact(const nfd::Face &face) {
     auto it = (m_entries.at(remoteEndPoint).end() - 1 );
     double contactDuration = it->endTime - it->startTime;
     uint64_t numberOfInBytes = face.getCounters().nInBytes;
-    auto entry = std::make_tuple(contactDuration,numberOfInBytes);
+    uint64_t numberOfSentInterest= face.getCounters().nOutInterests;
+    uint64_t numberOfReceivedInterest = face.getCounters().nInInterests;
+    uint64_t numberOfSentData = face.getCounters().nInData;
+    uint64_t numberOfReceivedData = face.getCounters().nOutData;
+    auto entry = std::make_tuple(contactDuration,numberOfInBytes, numberOfSentInterest, numberOfReceivedInterest, numberOfSentData, numberOfReceivedData);
     m_contactVector.push_back(entry);
 }
 
@@ -54,21 +58,56 @@ double NodeContactTable::getAverageContactDuration() {
 }
 
 double NodeContactTable::getFullContactDuration() {
-    auto acc =  std::accumulate(m_contactVector.begin(),m_contactVector.end(),std::make_tuple(0.0,(uint64_t)0),[](std::tuple<double,uint64_t>a, std::tuple<double,uint64_t> b){
-        return std::make_tuple(std::get<0>(a)+std::get<0>(b),std::get<1>(a)+std::get<1>(b));
-    });
-    return std::get<0>(acc);
+    double fullContactDuration = 0.0;
+    for(auto& it : m_contactVector){
+        fullContactDuration += std::get<0>(it);
+    }
+    return fullContactDuration;
 }
 
 uint64_t NodeContactTable::getFullTransferedBytes() {
-    auto acc = std::accumulate(m_contactVector.begin(), m_contactVector.end(), std::make_tuple(0.0,(uint64_t)0), [](std::tuple<double,uint64_t>a, std::tuple<double,uint64_t> b){
-            return std::make_tuple(std::get<0>(a)+std::get<0>(b),std::get<1>(a)+std::get<1>(b));
-        });
-
-    return std::get<1>(acc);
+    uint64_t fullTransfferedBytes = 0;
+    for(auto& it : m_contactVector){
+        fullTransfferedBytes += std::get<1>(it);
+    }
+    return fullTransfferedBytes;
 }
 
 double NodeContactTable::getAverageTransferredBytesPerContact() {
     return getFullTransferedBytes() / (double) m_contactVector.size();
 }
+
+uint64_t NodeContactTable::getNumberOfAllSentInterests() {
+    uint64_t totalNumberOfSentInterest = 0;
+    for(auto& it : m_contactVector){
+        totalNumberOfSentInterest += std::get<2>(it);
+    }
+    return totalNumberOfSentInterest;
+}
+
+uint64_t NodeContactTable::getNumberOfSuccessfullyTransferedInterests() {
+    uint64_t totalNumberOfReceivedInterest = 0;
+    for(auto& it : m_contactVector){
+        totalNumberOfReceivedInterest += std::get<3>(it);
+    }
+    return totalNumberOfReceivedInterest;
+}
+
+uint64_t NodeContactTable::getNumberOfAllSentData() {
+    uint64_t totalNumberOfsentData = 0;
+    for (auto &it : m_contactVector) {
+        totalNumberOfsentData += std::get<5>(it);
+    }
+    return totalNumberOfsentData;
+}
+
+uint64_t NodeContactTable::getNumberOfSuccessfullyTranssferredData() {
+    uint64_t totalNumberOfReceivedData = 0;
+    for (auto &it : m_contactVector) {
+        totalNumberOfReceivedData += std::get<4>(it);
+    }
+    return totalNumberOfReceivedData;
+
+}
+
 

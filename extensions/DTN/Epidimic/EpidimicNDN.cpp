@@ -18,12 +18,14 @@ namespace nfd{
 
         void EpidimicNDN::onContact(const Face &face) {
             m_nct.addContact(face);
-            log(" ############################################################################"" ");
             //m_nct.printDebugInfos();
-
-            m_cit.iterateOverElements([this, &face](citEntry& entry){
+            int n = 0;
+            m_cit.iterateOverElements([this, &face,&n](citEntry& entry){
                 m_shaper->Enqueue(entry.getInterest(), face);
+                n++;
             });
+
+            log(" ############################################################################ " + std::to_string(n));
 
             m_cdt.iterateOverElements([this, &face](cdtEntry& entry){
                m_shaper->Enqueue(entry.getData(),face);
@@ -47,12 +49,12 @@ namespace nfd{
                 can.second->sendInterest(interest);
                 return;
             }
+
             //we insert in the cit
             m_cit.insert(interest);
         }
 
         void EpidimicNDN::onData(const Data &data, const Face& face) {
-            //log("node received data packet ");
             //This will create a new entry in the nametree and delete any CIT entry available
             m_cdt.insert(data);
 

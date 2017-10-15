@@ -10,10 +10,16 @@ LeafNode::LeafNode(Node *parent, const ndn::Name::Component &component) : Node(p
 
 ndn::Name LeafNode::getEntryName() {
     Node* currentNode = this;
+    std::vector<std::string> componenets;
+
     ndn::Name name;
     while(currentNode->m_parent != nullptr){
-        name.append(currentNode->m_component);
+        componenets.push_back(currentNode->m_component);
         currentNode = currentNode->m_parent;
+    }
+
+    for(auto it = componenets.rbegin(); it != componenets.rend(); it++){
+        name.append(*it);
     }
 
     return name;

@@ -71,6 +71,6 @@ double AbstractShaper::getDataRateInBytePerSeconds() {
     ns3::WifiModeValue mode;
     station->GetAttribute("DataMode",mode);
     auto item = mode.Get();
-    return item.GetDataRate() / 16.0 ;
+    return item.GetDataRate() / 8.0 ;
 }
 

@@ -36,6 +36,10 @@ public:
     bool isHere(const ndn::Name name);
 
     void iterateOverElements(std::function<void (cdtEntry& entry)> func);
+
+    std::string getJsonSummary();
+
+    size_t size();
 private:
     uint64                  m_limitSizeInBytes;
 
